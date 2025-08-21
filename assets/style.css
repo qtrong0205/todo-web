@@ -122,6 +122,10 @@ label {
   display: none;
 }
 
+.note-empty.is-empty {
+  display: flex;
+}
+
 .empty-desc {
   font-size: 2rem;
   font-weight: bold;
@@ -247,6 +251,7 @@ label {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 /* pop up */
@@ -257,7 +262,10 @@ label {
   margin: 0 auto;
   border-radius: 20px;
   padding: 18px 30px;
-  position: relative;
+  position: fixed; /* 👈 thay vì relative */
+  top: 50%; /* căn giữa dọc */
+  left: 50%; /* căn giữa ngang */
+  transform: translate(-50%, -50%); /* căn giữa tuyệt đối */
   z-index: 999;
   visibility: hidden;
   opacity: 0;
