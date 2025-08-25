@@ -20,7 +20,7 @@ body {
 }
 
 input:focus {
-  outline: none;
+  outline: 3px solid transparent;
 }
 
 .container {
@@ -290,7 +290,6 @@ label {
   font-weight: 500;
   height: 100%;
   height: 40px;
-  outline: 3px solid transparent;
   padding: 0 16px;
   width: 100%;
   margin-bottom: 150px;
@@ -354,3 +353,53 @@ label {
   opacity: 1;
   visibility: visible;
 }
+
+.is-hidden {
+  display: none;
+}
+
+/* undo btn */
+.undo {
+  width: 123px;
+  height: 38px;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  position: fixed;
+  bottom: 25px;
+}
+
+.undo:hover{
+  background-color: #534cc2;
+  border: 2px solid #6c63ff;
+}
+
+.timer__sec{
+  z-index: 999;
+}
+
+.undo__timer{
+  /* margin-left: 8px; */
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #fff;
+}
+
+.undo__text{
+  margin-left: 15px;
+  text-transform: uppercase;
+}
+
+.undo__icon{
+  margin-left: 5px;
+}
+

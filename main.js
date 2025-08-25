@@ -90,30 +90,52 @@ notes.forEach((noteItem) => {
 });
 
 // ấn vào icon để xoá một note
+
 const noteList = document.querySelector(".note-list");
 noteList.addEventListener("click", (event) => {
   if (event.target.classList.contains("remove-icon")) {
+    let undoBtn = document.querySelector(".undo");
+    let timerSec = document.querySelector(".timer__sec");
     let targetRemove = event.target.closest(".note-item");
     let noteId = targetRemove.getAttribute("id");
 
-    let notes = JSON.parse(localStorage.getItem("notes")) || [];
+    // Ẩn note khỏi UI
+    targetRemove.classList.add("is-hidden");
 
-    // Giữ lại những note KHÁC id cần xoá
-    notes = notes.filter((note) => note.id != noteId);
+    // Hiện popup undo
+    undoBtn.style.display = "flex"
 
-    // Lưu lại vào localStorage
-    localStorage.setItem("notes", JSON.stringify(notes));
+    let sec = 5;
+    timerSec.textContent = sec; // reset số giây
 
-    if (notes.length === 0) {
-      document.querySelector(".note-empty").classList.add("is-empty");
-    } else {
-      document.querySelector(".note-empty").classList.remove("is-empty");
-    }
+    const stopTimer = setInterval(() => {
+      sec--;
+      timerSec.textContent = sec;
 
-    // Xoá trên UI
-    targetRemove.remove();
+      if (sec < 0) {
+        clearInterval(stopTimer);
+
+        // Xoá khỏi localStorage
+        let notes = JSON.parse(localStorage.getItem("notes")) || [];
+        notes = notes.filter((note) => note.id != noteId);
+        localStorage.setItem("notes", JSON.stringify(notes));
+
+        // Ẩn popup undo
+         undoBtn.style.display = "none"
+      }
+    }, 1000);
+
+    // Undo click chỉ cần add 1 lần thôi
+    const undoHandler = () => {
+      clearInterval(stopTimer);
+      targetRemove.classList.remove("is-hidden"); // hiện lại note
+      undoBtn.style.display = "none"; // ẩn popup
+      undoBtn.removeEventListener("click", undoHandler); // tránh gắn nhiều lần
+    };
+    undoBtn.addEventListener("click", undoHandler);
   }
 });
+
 
 noteList.addEventListener("change", (event) => {
   if (event.target.classList.contains("check-complete")) {
@@ -126,5 +148,27 @@ noteList.addEventListener("change", (event) => {
 
     localStorage.setItem("notes", JSON.stringify(notes));
     console.log("Updated:", notes);
+  }
+});
+
+window.addEventListener("load", function () {
+  if (notes.length === 0) {
+    document.querySelector(".note-empty").classList.add("is-empty");
+  } else {
+  }
+});
+
+const searchField = document.querySelector(".input-search");
+searchField.addEventListener("input", () => {
+  let textSearch = searchField.value.toLowerCase(); // thêm toLowerCase để tìm kiếm ko phân biệt hoa/thường
+  const notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+  for (let item of notes) {
+    let noteElement = document.getElementById(item.id);
+    if (!item.info.toLowerCase().includes(textSearch)) {
+      noteElement.classList.add("is-hidden");
+    } else {
+      noteElement.classList.remove("is-hidden");
+    }
   }
 });
